@@ -1,0 +1,41 @@
+<div id="menu" *ngIf="isAuthenticated">
+  <div
+    class="w3-sidebar w3-bar-block w3-card w3-animate-left"
+    style="display: none"
+    id="mySidebar"
+  >
+    <div class="top">
+      <img src="../../../assets/images/logo_name.png" class="logo" />
+      <button class="close w3-bar-item w3-button w3-large" (click)="w3_close()">
+        &times;
+      </button>
+    </div>
+
+    <a class="w3-bar-item w3-button" (click)="toCourses()">What's new</a>
+    <a class="w3-bar-item w3-button" (click)="createCourse()"
+      >Create a course</a
+    >
+    <a class="w3-bar-item w3-button" (click)="toProfile()">Your courses</a>
+    <div class="w3-bar-item profile-bar">
+      <!-- For changing profile picture  -->
+      <!-- matTooltip="Change picture"
+      matTooltipPosition="above" -->
+      <img
+
+        src="../../../assets/images/profile-picture.png"
+        class="profile"
+      />
+      <span>{{ userFullName }}</span>
+
+      <i class="fa fa-sign-out sign-out" (click)="logout()"></i>
+    </div>
+  </div>
+
+  <div id="main" class="bar">
+    <div>
+      <button id="openNav" class="w3-button w3-xlarge" (click)="w3_open()">
+        &#9776;
+      </button>
+    </div>
+  </div>
+</div>

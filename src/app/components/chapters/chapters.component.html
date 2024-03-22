@@ -1,0 +1,76 @@
+<div>
+  <div
+    class="w3-sidebar w3-bar-block w3-light-grey"
+    style="width: 15%; position: relative"
+  >
+    <div class="w3-bar-item">
+      <img id="thumbnail" alt="Course thumbanil" />
+      {{ course.title }}
+      <i class="editButton fa fa-edit" routerLink="/course-form"></i>
+    </div>
+
+    <!-- Chapters -->
+    <div *ngFor="let chapter of course.chapterList">
+      <button
+        class="w3-bar-item w3-button"
+        (click)="openChapter(chapter)"
+        routerLink="/course-videos"
+      >
+        {{ chapter.title }}
+        <span
+          class="fa"
+          [class.fa-angle-down]="selectedChapter !== chapter"
+          [class.fa-angle-up]="selectedChapter === chapter"
+        ></span>
+        <i
+          class="fa fa-trash-o trash-icon"
+          (click)="deleteChapter(chapter.title)"
+        ></i>
+      </button>
+
+      <div *ngIf="selectedChapter == chapter.title">
+        <ul>
+          <li *ngFor="let video of chapter.videoList" class="w3-bar-item">
+            {{ video.title }}
+            <i
+              class="fa fa-trash-o trash-icon"
+              (click)="deleteVideo(video.title)"
+            ></i>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Plus Button to Add Chapter -->
+
+    <div id="container" style="display: none">
+      <div class="newChapter">
+        <!-- <input
+          id="newChapterInput"
+          class="newChapterInput form-control"
+          type="text"
+          placeholder="Enter chapter name"
+          [ngModel]="newChapterName"
+          (ngModelChange)="newChapterName = $event"
+        /> -->
+        <div class="input-data">
+          <input
+            id="newChapterInput"
+            type="text"
+            [ngModel]="newChapterName"
+            (ngModelChange)="newChapterName = $event"
+          />
+          <div class="underline"></div>
+          <label for="">New Chapter</label>
+        </div>
+        <i class="gg-check" (click)="addChapter()"></i>
+      </div>
+    </div>
+    <div class="button-center">
+      <button class="plus-button" (click)="displayNewChapter()"></button>
+    </div>
+    <button id="createCourse" class="btn btn-dark" (click)="updateCourse()">
+      Create course
+    </button>
+  </div>
+</div>

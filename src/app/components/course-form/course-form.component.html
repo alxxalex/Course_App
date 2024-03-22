@@ -1,0 +1,130 @@
+<form [formGroup]="createCourseFormGroup" (ngSubmit)="onSubmit()">
+  <div formGroupName="details">
+    <div class="mb-3">
+      <label for="title" class="form-label label-bold">Course title</label>
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Your title"
+        id="title"
+        formControlName="title"
+      />
+
+      <!-- Validation -->
+      <div
+        *ngIf="title.invalid && (title.dirty || title.touched)"
+        class="alert alert-danger mt-1"
+      >
+        <div *ngIf="title.errors.required || title.errors.notOnlyWhitespace">
+          Title is required
+        </div>
+        <div *ngIf="title.hasError('minlength')">
+          Title must be at least 2 characters
+        </div>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="description" class="form-label label-bold"
+        >Course description</label
+      >
+      <textarea
+        class="form-control"
+        id="description"
+        rows="3"
+        placeholder="Your description"
+        formControlName="description"
+      ></textarea>
+
+      <!-- Validation -->
+      <div
+        *ngIf="
+          description.invalid && (description.dirty || description.touched)
+        "
+        class="alert alert-danger mt-1"
+      >
+        <div
+          *ngIf="
+            description.errors.required || description.errors.notOnlyWhitespace
+          "
+        >
+          Description is required
+        </div>
+        <div *ngIf="description.hasError('minlength')">
+          Description must be at least 2 characters
+        </div>
+      </div>
+    </div>
+
+    <!-- First Chapter -->
+    <div class="mb-3">
+      <label for="firstChapter" class="form-label label-bold"
+        >First Chapter title</label
+      >
+      <input
+        type="text"
+        class="form-control"
+        placeholder="First chapter title"
+        id="firstChapter"
+        formControlName="firstChapter"
+      />
+
+      <!-- Validation -->
+      <div
+        *ngIf="
+          firstChapter.invalid && (firstChapter.dirty || firstChapter.touched)
+        "
+        class="alert alert-danger mt-1"
+      >
+        <div
+          *ngIf="
+            firstChapter.errors.required ||
+            firstChapter.errors.notOnlyWhitespace
+          "
+        >
+          The course must have at least one chapter
+        </div>
+        <div *ngIf="firstChapter.hasError('minlength')">
+          First chapter title must be at least 2 characters
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <div class="center">
+        <ngx-file-drop
+          dropZoneLabel="Drop files here"
+          (onFileDrop)="dropped($event[0])"
+        >
+          <ng-template
+            ngx-file-drop-content-tmp
+            let-openFileSelector="openFileSelector"
+          >
+            Drag and Drop thumbnail in this section or
+            <button type="button" class="button" (click)="openFileSelector()">
+              Browse
+              <span class="span"> 🔎</span>
+            </button>
+          </ng-template>
+        </ngx-file-drop>
+        <div class="upload-table">
+          <table class="table" *ngIf="fileUploaded">
+            <thead>
+              <tr>
+                <th>Your thumbnail:</th>
+              </tr>
+            </thead>
+            <tbody class="upload-name-style">
+              <tr>
+                <td>
+                  <strong>{{ file?.relativePath }}</strong>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <button class="btn btn-dark" *ngIf="fileUploaded">Create course</button>
+      </div>
+    </div>
+  </div>
+</form>

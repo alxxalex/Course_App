@@ -1,0 +1,13 @@
+<app-chapters
+  (selectedChapterEmitter)="onChapterSelected($event)"
+  (courseEmitter)="courseEmitter($event)"
+  [course]="course"
+></app-chapters>
+
+<div id="container">
+  <app-upload-video
+    (courseEmitter)="courseEmitter($event)"
+    [selectedChapter]="selectedChapter"
+    [course]="course"
+  ></app-upload-video>
+</div>

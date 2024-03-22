@@ -1,0 +1,51 @@
+<div class="header">
+  <div>
+    <h1>{{ course.title }}</h1>
+    {{ course.likes }}
+    <i class="fa fa-thumbs-up thumbs-up"></i>
+    {{ course.dislikes }}
+    <i class="fa fa-thumbs-down thumbs-down"></i>
+    <br />
+    <span class="fa fa-star"></span>
+    <span class="fa fa-star"></span>
+    <span class="fa fa-star"></span>
+    <span class="fa fa-star"></span>
+    <span class="fa fa-star"></span>
+    <span>(0)</span>
+    <h2>Created by {{ course.author }}</h2>
+    <button class="btn btn-light btn-enroll" (click)="enrollUser()">Enroll now</button>
+  </div>
+
+  <img class="thumbnail" src="{{ course.thumbnailUrl }}" alt="" />
+</div>
+<div class="content">
+  <h2>Course Description</h2>
+  {{ course.description }}
+
+  <br />
+  <br />
+  <h2>Course content</h2>
+  {{ course.chapterList.length }} sections
+
+  <div class="w3-bar-block w3-light-grey chapters">
+    <!-- Chapters -->
+    <div *ngFor="let chapter of course.chapterList">
+      <button class="w3-bar-item w3-button" (click)="openChapter(chapter)">
+        {{ chapter.title }}
+        <span
+          class="fa"
+          [class.fa-angle-down]="selectedChapter !== chapter"
+          [class.fa-angle-up]="selectedChapter === chapter"
+        ></span>
+      </button>
+
+      <div *ngIf="selectedChapter == chapter.title">
+        <ul>
+          <li *ngFor="let video of chapter.videoList" class="w3-bar-item">
+            {{ video.title }}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

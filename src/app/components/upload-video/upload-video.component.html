@@ -1,26 +1,97 @@
 <div class="center">
-    <ngx-file-drop dropZoneLabel="Drop files here" (onFileDrop)="dropped($event)" 
-    (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)">
-        <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
-          Drag and Drop videos in this section or 
-          <button type="button" (click)="openFileSelector()">Browse Video</button>
-        </ng-template>
-    </ngx-file-drop>
-    <div class="upload-table">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                </tr>
-            </thead>
-            <tbody class="upload-name-style">
-                <tr *ngFor="let item of files; let i=index">
-                    <td><strong>{{ item.relativePath }}</strong></td>
-                </tr>
-            </tbody>
-        </table>
+  <h1>Add a video for {{ selectedChapter }}</h1>
+  <form [formGroup]="createVideoDetailsGroup" (ngSubmit)="onSubmit()">
+    <div formGroupName="video">
+      <div class="mb-3">
+        <label for="title" class="form-label" id="title-label"
+          >Video title</label
+        >
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Your title"
+          id="title"
+          formControlName="title"
+        />
+
+        <!-- Validation -->
+        <div
+          *ngIf="title.invalid && (title.dirty || title.touched)"
+          class="alert alert-danger mt-1"
+        >
+          <div *ngIf="title.errors.required || title.errors.notOnlyWhitespace">
+            Title is required
+          </div>
+          <div *ngIf="title.hasError('minlength')">
+            Title must be at least 2 characters
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="description" class="form-label" id="description-label"
+          >Video description</label
+        >
+        <textarea
+          class="form-control"
+          id="description"
+          rows="3"
+          placeholder="Your description"
+          formControlName="description"
+        ></textarea>
+
+        <!-- Validation -->
+        <div
+          *ngIf="
+            description.invalid && (description.dirty || description.touched)
+          "
+          class="alert alert-danger mt-1"
+        >
+          <div
+            *ngIf="
+              description.errors.required ||
+              description.errors.notOnlyWhitespace
+            "
+          >
+            Description is required
+          </div>
+          <div *ngIf="description.hasError('minlength')">
+            Description must be at least 2 characters
+          </div>
+        </div>
+      </div>
     </div>
 
-    <button (click)="uploadVideo()" *ngIf="fileUploaded">Upload</button>
+    <ngx-file-drop
+      dropZoneLabel="Drop files here"
+      (onFileDrop)="dropped($event[0])"
+    >
+      <ng-template
+        ngx-file-drop-content-tmp
+        let-openFileSelector="openFileSelector"
+      >
+        Drag and Drop videos in this section or
+        <button class="button" type="button" (click)="openFileSelector()">
+          Browse
+          <span class="span"> 🔎</span>
+        </button>
+      </ng-template>
+    </ngx-file-drop>
+    <div class="upload-table">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Name</th>
+          </tr>
+        </thead>
+        <tbody class="upload-name-style">
+            <td>
+              <strong>{{ droppedFile?.relativePath }}</strong>
+            </td>
+        </tbody>
+      </table>
+    </div>
 
+    <button class="btn btn-dark" *ngIf="fileUploaded">Upload</button>
+  </form>
 </div>
