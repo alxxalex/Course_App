@@ -1,3 +1,7 @@
+<div *ngIf="loading" class="loader-container">
+  <div class="loader"></div>
+</div>
+
 <div class="header">
   <div>
     <h1>{{ course.title }}</h1>
@@ -6,14 +10,34 @@
     {{ course.dislikes }}
     <i class="fa fa-thumbs-down thumbs-down"></i>
     <br />
-    <span class="fa fa-star"></span>
-    <span class="fa fa-star"></span>
-    <span class="fa fa-star"></span>
-    <span class="fa fa-star"></span>
-    <span class="fa fa-star"></span>
-    <span>(0)</span>
+    <i
+      *ngFor="let r of getStarRange(course.ratingMean)"
+      class="fa fa-star selected"
+    ></i>
+    <i
+      *ngFor="let r of getStarRange(5 - course.ratingMean)"
+      class="fa fa-star"
+    ></i>
+    <span *ngIf="course.ratingList">({{ course.ratingList.length }})</span>
+    <span *ngIf="!course.ratingList">(0)</span>
     <h2>Created by {{ course.author }}</h2>
-    <button class="btn btn-light btn-enroll" (click)="enrollUser()">Enroll now</button>
+    <button
+      *ngIf="!enrolled && !course.archived"
+      class="btn btn-light btn-enroll"
+      (click)="enrollUser()"
+    >
+      Enroll now
+    </button>
+
+    <button
+      *ngIf="enrolled && !course.archived"
+      class="btn btn-light btn-enroll"
+      (click)="navigateToCourseContent(course.courseId)"
+    >
+      Watch
+    </button>
+
+    <div *ngIf="course.archived" class="arhive-message">You can no longer enroll in this course</div>
   </div>
 
   <img class="thumbnail" src="{{ course.thumbnailUrl }}" alt="" />
@@ -27,10 +51,13 @@
   <h2>Course content</h2>
   {{ course.chapterList.length }} sections
 
-  <div class="w3-bar-block w3-light-grey chapters">
+  <div class="chapters">
     <!-- Chapters -->
-    <div *ngFor="let chapter of course.chapterList">
-      <button class="w3-bar-item w3-button" (click)="openChapter(chapter)">
+    <div *ngFor="let chapter of course.chapterList" class="chapter-container">
+      <button
+        class="chapter-button w3-bar-item w3-button"
+        (click)="openChapter(chapter)"
+      >
         {{ chapter.title }}
         <span
           class="fa"
@@ -39,13 +66,56 @@
         ></span>
       </button>
 
-      <div *ngIf="selectedChapter == chapter.title">
-        <ul>
-          <li *ngFor="let video of chapter.videoList" class="w3-bar-item">
+      <div
+        *ngIf="
+          selectedChapter === chapter.title && chapter.videoList.length > 0
+        "
+        class="video-list-container"
+      >
+        <ul class="video-list">
+          <li
+            *ngFor="let video of chapter.videoList"
+            class="video-item w3-bar-item"
+          >
             {{ video.title }}
           </li>
         </ul>
       </div>
     </div>
+  </div>
+
+  <br />
+  <br />
+  <h2 *ngIf="course.auxiliaryFiles.length > 0">Auxiliary Documents</h2>
+  <div *ngFor="let file of course.auxiliaryFiles" class="file-item w3-bar-item">
+    <a href="{{ file.auxiliaryFileUrl }}" class="file-link">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="feather feather-file-text file-icon"
+      >
+        <path
+          d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+        ></path>
+        <polyline points="14 2 14 8 20 8"></polyline>
+        <line x1="16" y1="13" x2="8" y2="13"></line>
+        <line x1="16" y1="17" x2="8" y2="17"></line>
+        <polyline points="10 9 9 9 8 9"></polyline>
+      </svg>
+      {{ file.name }}
+    </a>
+  </div>
+  <br />
+  <br />
+  <h2 *ngIf="course.commentList.length > 0">Comments</h2>
+  <div *ngFor="let comment of course.commentList" class="w3-bar-item">
+    <app-comment-card [comment]="comment"></app-comment-card>
   </div>
 </div>

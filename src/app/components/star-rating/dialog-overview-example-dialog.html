@@ -1,0 +1,43 @@
+<mat-dialog-content>
+  <span class="star-container" (mouseleave)="onMouseLeave()">
+    <h2>Review {{data.title}}</h2>
+    <div class="star-padding">
+      <i
+        class="fa fa-star"
+        (mouseover)="onStarHover(1)"
+        (click)="onStarClick(1)"
+        [ngClass]="{ selected: starsSelected >= 1 }"
+      ></i>
+      <i
+        class="fa fa-star"
+        (mouseover)="onStarHover(2)"
+        (click)="onStarClick(2)"
+        [ngClass]="{ selected: starsSelected >= 2 }"
+      ></i>
+      <i
+        class="fa fa-star"
+        (mouseover)="onStarHover(3)"
+        (click)="onStarClick(3)"
+        [ngClass]="{ selected: starsSelected >= 3 }"
+      ></i>
+      <i
+        class="fa fa-star"
+        (mouseover)="onStarHover(4)"
+        (click)="onStarClick(4)"
+        [ngClass]="{ selected: starsSelected >= 4 }"
+      ></i>
+      <i
+        class="fa fa-star"
+        (mouseover)="onStarHover(5)"
+        (click)="onStarClick(5)"
+        [ngClass]="{ selected: starsSelected >= 5 }"
+      ></i>
+    </div>
+  </span>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">No Thanks</button>
+  <button mat-button [mat-dialog-close]="data.starsSelected" cdkFocusInitial>
+    Submit
+  </button>
+</mat-dialog-actions>

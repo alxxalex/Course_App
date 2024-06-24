@@ -1,5 +1,88 @@
-<div class="videoLayout">
-  <div *ngFor="let course of courses">
-    <app-card [course]="course"></app-card>
+<div *ngIf="loading" class="loader-container">
+  <div class="loader"></div>
+</div>
+
+<div>
+  <div class="w3-sidebar w3-bar-block sidebar fixed" style="width: 16.5%">
+    <h2 class="w3-bar-item" class="filterTitle">Job Titles</h2>
+
+    <ul>
+      <div
+        id="jobTitle"
+        *ngFor="let title of jobTitles"
+        (click)="filterByJobTitle(title)"
+        [ngStyle]="{
+          'border-left':
+            selectedTitle === title ? '1px solid white' : 'transparent',
+          'border-radius': selectedTitle === title ? '5px 5px 5px 5px' : '0'
+        }"
+      >
+        <li class="w3-bar-item w3-button">
+          <span class="green-circle" *ngIf="selectedTitle === title"></span>
+          {{ title }}
+        </li>
+      </div>
+    </ul>
+  </div>
+</div>
+
+<div class="courses-container">
+  <div class="top">
+    <div class="title-container">
+      <span
+        *ngIf="selectedTitle == '' && filteredCourses.length != 0"
+        class="title"
+      >
+        <span class="label">New courses</span>
+      </span>
+      <span
+        *ngIf="selectedTitle !== '' && filteredCourses.length != 0"
+        class="title"
+      >
+        Courses for {{ selectedTitle }}
+      </span>
+      <span *ngIf="filteredCourses.length == 0" class="title">
+        No courses for {{ selectedTitle }}
+      </span>
+      <span class="search-container">
+        <input
+          #myInput
+          type="text"
+          placeholder="Search for courses..."
+          class="search-input"
+          (keyup.enter)="listCourses(myInput.value, selectedTitle)"
+          (keyup)="allCoursesIfBlank(myInput.value)"
+          [(ngModel)]="searchTitle"
+        />
+
+        <button
+          (click)="listCourses(myInput.value, selectedTitle)"
+          class="btn btn-dark btn-search"
+        >
+          <i class="fa fa-search search-loop"></i>
+        </button>
+      </span>
+    </div>
+  </div>
+
+  <div class="coursesLayout">
+    <div *ngFor="let course of filteredCourses">
+      <app-card [course]="course"></app-card>
+    </div>
+    <div *ngIf="filteredCourses.length == 0">
+      <app-no-data-page></app-no-data-page>
+    </div>
+  </div>
+  <div class="container-pagination">
+    <div *ngIf="filteredCourses?.length != 0">
+      <ngb-pagination
+        [(page)]="thePageNumber"
+        [pageSize]="thePageSize"
+        [collectionSize]="theTotalElements"
+        [maxSize]="5"
+        [boundaryLinks]="true"
+        (pageChange)="listCourses(searchTitle, selectedTitle)"
+      ></ngb-pagination>
+    </div>
   </div>
 </div>

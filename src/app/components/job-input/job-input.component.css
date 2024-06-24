@@ -1,0 +1,12 @@
+.example-chip-list {
+  width: 100%;
+}
+
+.newJobInput {
+  border-color: rgb(203, 161, 53);
+  margin-bottom: 20px;
+}
+
+.form-control:focus {
+  box-shadow: 0 0 0 3px rgba(203, 161, 53, 0.3);
+}

@@ -18,11 +18,16 @@ export class CardComponent implements OnInit {
     private courseTransferService: CourseTransferService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {    
+  }
 
   courseDetails() {
     this.courseTransferService.transferObject(this.course);
 
     this.router.navigate([{ outlets: { primary: 'course-details' } }]);
+  }
+
+  getStarRange(count: number): number[] {    
+    return Array(count).fill(0).map((_, index) => index + 1);
   }
 }

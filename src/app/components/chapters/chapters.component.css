@@ -3,8 +3,8 @@
 }
 
 .plus-button {
-  border: 2.5px dotted grey;
-  background-color: #fff;
+  border: 2.5px dotted rgb(203,161,53);
+  background-color: rgb(40, 40, 43);
   font-size: 16px;
   height: 2.5em;
   width: 2.5em;
@@ -15,7 +15,7 @@
   &:before {
     content: "";
     display: block;
-    background-color: grey;
+    background-color: rgb(203,161,53);
     position: absolute;
     top: 50%;
     left: 50%;
@@ -105,7 +105,7 @@
 }
 
 #thumbnail {
-  width: 50px;
+  width: 70px;
   height: 40px;
   margin-right: 5px;
 }
@@ -146,8 +146,14 @@
 .textarea textarea:valid ~ label {
   transform: translateY(-20px);
   font-size: 12px;
-  color: #0782d0;
+  color: 	white
+;
   border: none;
+  text-shadow:
+    1px 1px 0 rgb(0, 0, 0),
+    -1px -1px 0 rgb(0, 0, 0),
+    1px -1px 0 rgb(0, 0, 0),
+    -1px 1px 0 rgb(0, 0, 0);
 }
 .input-data label {
   position: absolute;
@@ -166,9 +172,9 @@
 .input-data .underline:before {
   position: absolute;
   content: "";
-  height: 2px;
+  height: 4px;
   width: 100%;
-  background: #0782d0;
+  background: rgb(203,161,53);
   transform: scaleX(0);
   transform-origin: center;
   transition: transform 0.3s ease;
@@ -178,4 +184,29 @@
 .textarea textarea:focus ~ .underline:before,
 .textarea textarea:valid ~ .underline:before {
   transform: scale(1);
+}
+
+.sidebar{
+  width: 18%;
+  position: relative;
+  padding: 15px;
+  background-color:rgb(40, 40, 43);
+  color: white;
+  border-right: 3px solid black;
+  box-shadow: 18px 0 20px -5px rgba(0, 0, 0, 0.3);
+
+}
+
+#createCourse{
+  border: 0.5px solid rgb(203,161,53);
+}
+
+.green-circle {
+  display: inline-block; 
+  width: 8px;          
+  height: 8px;         
+  background-color: green; 
+  border-radius: 50%;
+  margin-bottom: 2px;
+  margin-right: 2px;   
 }

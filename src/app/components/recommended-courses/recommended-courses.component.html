@@ -1,0 +1,50 @@
+<div *ngIf="loading" class="loader-container">
+    <div class="loader"></div>
+</div>
+  
+  <div>
+    <div class="w3-sidebar w3-bar-block sidebar fixed" style="width: 16.5%">
+      <h2 class="w3-bar-item" class="filterTitle">Job Titles</h2>
+  
+      <ul>
+        <div
+          id="jobTitle"
+          *ngFor="let title of jobTitles"
+          (click)="filterByJobTitle(title)"
+          [ngStyle]="{
+            'border-left':
+              selectedTitle === title ? '1px solid white' : 'transparent',
+            'border-radius': selectedTitle === title ? '5px 5px 5px 5px' : '0'
+          }"
+        >
+          <li class="w3-bar-item w3-button">
+            <span class="green-circle" *ngIf="selectedTitle === title"></span>
+            {{ title }}
+          </li>
+        </div>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="courses-container">
+    <h2 *ngIf="selectedTitle == ''">
+      Recommended courses
+    </h2>
+    <h2 *ngIf="selectedTitle !== '' && filteredCourses.length != 0">
+      Courses for {{ selectedTitle }}
+    </h2>
+    <h2 *ngIf="filteredCourses.length == 0 && recommendedCourses.length > 0">
+      No courses for {{ selectedTitle }}
+    </h2>
+  
+    <div class="coursesLayout">
+      <div *ngFor="let course of filteredCourses">
+        <app-card [course]="course"></app-card>
+      </div>
+      <div *ngIf="filteredCourses.length == 0">
+        <app-no-data-page></app-no-data-page>
+      </div>
+    </div>
+  </div>
+  
+  

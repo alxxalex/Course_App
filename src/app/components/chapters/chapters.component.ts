@@ -12,6 +12,7 @@ import {
 import { Router } from '@angular/router';
 import { Chapter } from 'src/app/common/chapter';
 import { Course } from 'src/app/common/course';
+import { Video } from 'src/app/common/video';
 import { CourseTransferService } from 'src/app/services/course-transfer.service';
 import { CourseService } from 'src/app/services/course.service';
 import Swal from 'sweetalert2';
@@ -26,15 +27,18 @@ export class ChaptersComponent implements OnInit, AfterViewInit, OnChanges {
     private elementRef: ElementRef,
     private courseTransferService: CourseTransferService,
     private courseService: CourseService,
-    private router: Router,
+    private router: Router
   ) {}
 
   newChapterName: string = '';
   selectedChapter: any = null;
+  selectedVideo: Video = new Video();
   @Input() course!: Course;
 
   @Output() selectedChapterEmitter = new EventEmitter<string>();
   @Output() courseEmitter = new EventEmitter<Course>();
+  @Output() videoEmitter = new EventEmitter<Video>();
+
 
   ngOnInit(): void {
     this.courseTransferService.currentObject.subscribe((course) => {
@@ -134,12 +138,19 @@ export class ChaptersComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   updateCourse() {
-    this.courseService.updateCourse(this.course,this.course.courseId).subscribe( (data) =>{
-      console.log(data);
-    })
+    this.courseService
+      .updateCourse(this.course, this.course.courseId)
+      .subscribe((data) => {
+        this.router.navigate([{ outlets: { primary: 'courses' } }]);
+      });
+  }
 
-    this.router.navigate([
-      { outlets: { primary: 'courses' } },
-    ]);
+  selectVideo(video: Video){
+    if(this.selectedVideo.title === video.title){
+      this.selectedVideo = new Video();
+    }else{
+      this.selectedVideo = video
+    }
+    this.videoEmitter.emit(this.selectedVideo);
   }
 }

@@ -1,4 +1,7 @@
-<mat-card class="example-card">
+<mat-card
+  class="example-card"
+  [ngClass]="{ 'inactive-course': course.archived }"
+>
   <img
     class="thumbnail"
     mat-card-image
@@ -7,16 +10,24 @@
   />
   <mat-card-content>
     <mat-card-header>
-      <div mat-card-avatar class="example-header-image"></div>
+      <img mat-card-avatar [src]="course.pictureUrl" alt="" />
       <mat-card-title>{{ course.title }}</mat-card-title>
       <mat-card-subtitle>{{ course.author }}</mat-card-subtitle>
     </mat-card-header>
-    <span class="fa fa-star"></span>
-    <span class="fa fa-star"></span>
-    <span class="fa fa-star"></span>
-    <span class="fa fa-star"></span>
-    <span class="fa fa-star"></span>
-    <span>(0)</span>
-    <button class="btn btn-dark enroll-btn" (click)="courseDetails()">Details</button>
+    <i
+      *ngFor="let r of getStarRange(course.ratingMean)"
+      class="fa fa-star selected"
+    ></i>
+    <i
+      *ngFor="let r of getStarRange(5 - course.ratingMean)"
+      class="fa fa-star"
+    ></i>
+
+    <span *ngIf="course.ratingList">({{ course.ratingList.length }})</span>
+    <span *ngIf="!course.ratingList">(0)</span>
+
+    <button class="btn btn-dark enroll-btn" (click)="courseDetails()">
+      Details
+    </button>
   </mat-card-content>
 </mat-card>

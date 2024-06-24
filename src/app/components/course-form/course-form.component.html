@@ -1,10 +1,14 @@
+<div *ngIf="loading" class="loader-container">
+  <div class="loader"></div>
+</div>
+
 <form [formGroup]="createCourseFormGroup" (ngSubmit)="onSubmit()">
   <div formGroupName="details">
     <div class="mb-3">
       <label for="title" class="form-label label-bold">Course title</label>
       <input
         type="text"
-        class="form-control"
+        class="form-control input"
         placeholder="Your title"
         id="title"
         formControlName="title"
@@ -28,7 +32,7 @@
         >Course description</label
       >
       <textarea
-        class="form-control"
+        class="form-control input"
         id="description"
         rows="3"
         placeholder="Your description"
@@ -55,6 +59,24 @@
       </div>
     </div>
 
+    <!-- Job Title -->
+    <div class="mb-3">
+      <label for="jobTitle" class="form-label label-bold">Job Titles </label>
+      <app-job-input
+        id="jobTitle"
+        formControlName="jobTitle"
+        (jobsChange)="onJobsChange($event)"
+      ></app-job-input>
+
+      <!-- Validation Message -->
+      <div
+        *ngIf="jobTitle.invalid && (jobTitle.dirty || jobTitle.touched)"
+        class="alert alert-danger mt-1"
+      >
+        <div *ngIf="jobTitle.errors?.['required']">Job Title is required</div>
+      </div>
+    </div>
+
     <!-- First Chapter -->
     <div class="mb-3">
       <label for="firstChapter" class="form-label label-bold"
@@ -62,7 +84,7 @@
       >
       <input
         type="text"
-        class="form-control"
+        class="form-control input"
         placeholder="First chapter title"
         id="firstChapter"
         formControlName="firstChapter"
@@ -90,8 +112,12 @@
     </div>
 
     <div class="mb-3">
-      <div class="center">
+      <label for="thumbnail" class="form-label label-bold"
+        >Thumbnail</label
+      >
+      <div class="center" >
         <ngx-file-drop
+          id="thumbnail"
           dropZoneLabel="Drop files here"
           (onFileDrop)="dropped($event[0])"
         >
@@ -99,7 +125,9 @@
             ngx-file-drop-content-tmp
             let-openFileSelector="openFileSelector"
           >
-            Drag and Drop thumbnail in this section or
+            <p style="color: black">
+              Drag and Drop thumbnail in this section or
+            </p>
             <button type="button" class="button" (click)="openFileSelector()">
               Browse
               <span class="span"> 🔎</span>

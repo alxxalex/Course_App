@@ -1,1 +1,48 @@
-<p>course-content works!</p>
+<div class="w3-sidebar w3-bar-block sidebar" *ngIf="isVideoPresent">
+  <h2>{{course.title}}</h2>
+  <div *ngFor="let chapter of course.chapterList">
+    <button class="w3-bar-item w3-button" (click)="openChapter(chapter)">
+      {{ chapter.title }}
+      <span
+        class="fa"
+        [class.fa-angle-down]="selectedChapter.title !== chapter.title"
+        [class.fa-angle-up]="selectedChapter.title === chapter.title"
+      ></span>
+    </button>
+
+    <div *ngIf="selectedChapter.title == chapter.title">
+      <ul>
+        <li *ngFor="let video of chapter.videoList">
+          <div
+            class="w3-bar-item w3-button video-bar-item"
+            (click)="selectVideo(video)"
+          >
+            {{ video.title }}
+            <i class="gg-check" *ngIf="video?.usersThatWatched?.includes(email)"></i>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="content-container">
+  <div class="video-player-container">
+    <h1>{{ selectedVideo?.title }}</h1>
+    <div *ngIf="isVideoPresent">
+      <video
+        [src]="selectedVideo?.videoUrl"
+        controls
+        (ended)="onVideoEnded()"
+      >
+        Your browser does not support the video tag.
+      </video>
+    </div>
+
+    <h2>Description</h2>
+
+    <div class="description">
+      {{ selectedVideo?.description }}
+    </div>
+  </div>
+</div>

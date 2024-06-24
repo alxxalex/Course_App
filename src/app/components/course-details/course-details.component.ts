@@ -6,7 +6,7 @@ import { Chapter } from 'src/app/common/chapter';
 import { Course } from 'src/app/common/course';
 import { Enrollment } from 'src/app/common/enrollment';
 import { CourseTransferService } from 'src/app/services/course-transfer.service';
-import { ErnollmentService } from 'src/app/services/ernollment.service';
+import { EnrollmentService } from 'src/app/services/enrollment.service';
 
 @Component({
   selector: 'app-course-details',
@@ -16,25 +16,42 @@ import { ErnollmentService } from 'src/app/services/ernollment.service';
 export class CourseDetailsComponent implements OnInit {
   course!: Course;
   selectedChapter: any = null;
+  enrolled: boolean = true;
+  email = sessionStorage.getItem('email');
+  loading: boolean = false;
 
   constructor(
     private courseTransferService: CourseTransferService,
     @Inject(OKTA_AUTH) private oktaAuth: OktaAuth,
-    private enrollmentService: ErnollmentService,
+    private enrollmentService: EnrollmentService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
+    
     this.courseTransferService.currentObject.subscribe((course) => {
-      this.course = course;
-    });
-    if (this.course.title == '') {
-      this.course = JSON.parse(localStorage.getItem('course-details')!);
-    } else {
-      localStorage.setItem('course-details', JSON.stringify(this.course));
-    }
-
-    console.log(this.course);
+      // console.log(course);
+      
+      this.course = course;      
+      if (this.course.title == '') {
+        this.course = JSON.parse(localStorage.getItem('course-details')!);
+        console.log(this.course);
+        
+      } else {
+        localStorage.setItem('course-details', JSON.stringify(this.course));
+      }
+      if (this.email !== null) {
+        this.enrollmentService
+          .getEnrollemntByEmail(this.email)
+          .subscribe((data) => {
+            if(data == null){
+              this.enrolled = false;
+            }else{
+              this.enrolled = data.courses.includes(this.course.courseId);
+            }
+          });
+      }
+    });    
   }
 
   openChapter(chapter: Chapter) {
@@ -46,18 +63,29 @@ export class CourseDetailsComponent implements OnInit {
   }
 
   enrollUser() {
-    this.oktaAuth.getUser().then((res) => {
-      if (res.email !== undefined) {
-        let enrollment = new Enrollment(res.email, [this.course.courseId]);
+    this.loading = true;
 
-        this.enrollmentService.addEnrollment(enrollment).subscribe((data) => {
-          console.log(data);
+    if (this.email !== null) {
+      this.enrollmentService
+        .addEnrollment(this.email, this.course.courseId)
+        .subscribe((data: any) => {
+          console.log(
+            'The user has enrolled to the course ' + this.course.title
+          );
+          this.router.navigate(['/course-content', this.course.courseId]);
         });
-        
-        this.router.navigate([
-          { outlets: { primary: 'course-content' } },
-        ])
-      }
-    });
+    }
+  }
+
+  getStarRange(count: number): number[] {
+    return Array(count)
+      .fill(0)
+      .map((_, index) => index + 1);
+  }
+
+  navigateToCourseContent(courseId: string) {
+    this.router.navigate([
+      { outlets: { primary: 'course-content/' + courseId } },
+    ]);
   }
 }

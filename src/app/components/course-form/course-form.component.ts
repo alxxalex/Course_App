@@ -10,6 +10,7 @@ import {
 } from 'ngx-file-drop';
 import { Chapter } from 'src/app/common/chapter';
 import { Course } from 'src/app/common/course';
+import { JobTitle } from 'src/app/common/job-title';
 import { CourseTransferService } from 'src/app/services/course-transfer.service';
 import { CourseService } from 'src/app/services/course.service';
 
@@ -27,6 +28,9 @@ export class CourseFormComponent implements OnInit {
   userFullName: string = '';
 
   createCourseFormGroup: any;
+  loading: boolean = false;
+
+  jobTitles = Object.values(JobTitle);  
 
   constructor(
     private formBuilder: FormBuilder,
@@ -52,20 +56,15 @@ export class CourseFormComponent implements OnInit {
           Validators.required,
           Validators.minLength(2),
         ]),
+        jobTitle: new FormControl('', [
+          Validators.required,
+        ]),
       }),
     });
     this.oktaAuthService.authState$.subscribe((result) => {
       this.isAuthenticated = result.isAuthenticated!;
-      this.getUserDetails();
+      this.userFullName = sessionStorage.getItem("userFullName")!;
     });
-  }
-
-  getUserDetails() {
-    if (this.isAuthenticated) {
-      this.oktaAuth.getUser().then((res) => {
-        this.userFullName = res.name as string;
-      });
-    }
   }
 
   get title() {
@@ -78,6 +77,10 @@ export class CourseFormComponent implements OnInit {
 
   get firstChapter() {
     return this.createCourseFormGroup.get('details.firstChapter');
+  }
+
+  get jobTitle(){
+    return this.createCourseFormGroup.get('details.jobTitle');
   }
 
   public dropped(droppedFile: NgxFileDropEntry) {
@@ -104,7 +107,14 @@ export class CourseFormComponent implements OnInit {
       return;
     }
 
+    this.loading = true;
+    
     this.createCourse();
+  }
+
+  onJobsChange(jobs: string[]): void {
+    console.log('Jobs:', jobs);
+    this.createCourseFormGroup.get('details.jobTitle')?.setValue(jobs);
   }
 
   createCourse() {
@@ -121,6 +131,8 @@ export class CourseFormComponent implements OnInit {
         )?.value;
         course.chapterList[0] = firstChapter;
         course.author = this.userFullName;
+        course.pictureUrl = sessionStorage.getItem('profilePictureUrl')!;
+        course.jobTitle = this.jobTitle?.value;
 
         this.courseService.addCourse(course).subscribe((data) => {
           if (this.fileEntry !== undefined) {

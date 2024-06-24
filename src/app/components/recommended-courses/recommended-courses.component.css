@@ -1,0 +1,122 @@
+.coursesLayout {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Three columns with equal width */
+    padding: 10px;
+    padding-left: 15px; 
+  }
+  
+  .courses-container{
+    margin-left: 16%;
+  }
+  
+  .courses-container h2 {
+    padding: 20px;
+    color: rgb(40, 40, 43); /* Text color */
+    border-bottom: 3px solid rgb(203, 161, 53); /* Bottom border color */
+    text-align: left; /* Left aligned text */
+    font-size: 24px; /* Font size */
+    margin: 0 35px 20px 35px; /* Margins specified in one line */
+  }
+  
+  .green-circle {
+    display: inline-block; 
+    width: 8px;          
+    height: 8px;         
+    background-color: green; 
+    border-radius: 50%;
+    margin-bottom: 2px;
+    margin-right: 2px;   
+  }
+  
+  .filterTitle{
+    margin-bottom: 0px;
+    padding-bottom: 5px;
+    font-size: 22px;
+  }
+  
+  .w3-button {
+    border-left: 4px solid transparent; /* Transparent left border */
+    transition: border-left-color 0.3s ease; /* Smooth border color transition */
+  }
+  
+  .w3-button:hover {
+    border-left-color: white; /* Border color on hover */
+  }
+  
+  h2{
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+  }
+  
+  .sidebar{
+    background-color:rgb(40, 40, 43);
+    color: white;
+    box-shadow: 10px 0 20px -5px rgba(0, 0, 0, 0.3);
+    padding-top: 20px;
+    padding-left: 10px;
+  }
+  
+  .sidebar::-webkit-scrollbar {
+    width: 8px; 
+  }
+  
+  .sidebar::-webkit-scrollbar-track {
+    background: rgb(40, 40, 43); 
+    border-radius: 10px; 
+  }
+  
+  .sidebar::-webkit-scrollbar-thumb {
+    background-color: white; 
+    border-radius: 10px; 
+    border: 2px solid black; 
+  }
+  
+  .recommendation-button {
+    float: right;
+    background-color: rgb(40, 40, 43); /* Black background */
+    border: 2px solid rgb(203, 161, 53); /* Gold border */
+    color: white; /* Text color */
+    padding: 5px 10px; /* Smaller padding */
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px; /* Smaller font size */
+    margin-left: auto; /* Pushes the button to the right */
+    cursor: pointer;
+    border-radius: 8px;
+  }
+  
+  .recommendation-button:hover {
+    background-color: #333; /* Lighter black background */
+  }
+  
+  
+  .loader {
+    width: 60px;
+    padding: 8px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: black;
+    --_m: conic-gradient(#0000 10%, #000), linear-gradient(#000 0 0) content-box;
+    -webkit-mask: var(--_m);
+    mask: var(--_m);
+    -webkit-mask-composite: source-out;
+    mask-composite: subtract;
+    animation: l3 1s infinite linear;
+  }
+  @keyframes l3 {
+    to {
+      transform: rotate(1turn);
+    }
+  }
+  
+  .loader-container {
+    background-color: rgba(0, 0, 0, 0.4);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    z-index: 10;
+  }

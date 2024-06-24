@@ -1,6 +1,9 @@
 export class Comment {
-  text: string = '';
-  authorId: string = '';
-  likeCount: number = 0;
-  dislikeCount: number = 0;
+  likeCount: number;
+  dislikeCount: number;
+
+  constructor(public text: string, public author: string) {
+    this.likeCount = 0;
+    this.dislikeCount = 0;
+  }
 }

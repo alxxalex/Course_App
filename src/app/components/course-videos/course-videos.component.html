@@ -1,13 +1,33 @@
-<app-chapters
-  (selectedChapterEmitter)="onChapterSelected($event)"
-  (courseEmitter)="courseEmitter($event)"
-  [course]="course"
-></app-chapters>
-
-<div id="container">
-  <app-upload-video
+<div class="main-container">
+  <app-chapters
+    (selectedChapterEmitter)="onChapterSelected($event)"
     (courseEmitter)="courseEmitter($event)"
-    [selectedChapter]="selectedChapter"
+    (videoEmitter)="videoEmitter($event)"
     [course]="course"
-  ></app-upload-video>
+    class="chapters-container"
+  ></app-chapters>
+
+  <div class="content-container">
+    <div id="container" *ngIf="!isVideoPresent">
+      <app-upload-video
+        (courseEmitter)="courseEmitter($event)"
+        [selectedChapter]="selectedChapter"
+        [course]="course"
+      ></app-upload-video>
+    </div>
+
+    <div class="video-player-container" *ngIf="selectedVideo.title !== ''">
+      <h1>Preview of {{ selectedVideo?.title }}</h1>
+      <div *ngIf="isVideoPresent">
+        <video [src]="selectedVideo?.videoUrl" controls>
+          Your browser does not support the video tag.
+        </video>
+      </div>
+
+      <h2>Description </h2>
+      <div class="description">
+        {{ selectedVideo?.description }}
+      </div>
+    </div>
+  </div>
 </div>

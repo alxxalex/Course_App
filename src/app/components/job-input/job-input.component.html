@@ -1,0 +1,22 @@
+  <mat-chip-list #chipList aria-label="Job selection">
+    <mat-chip *ngFor="let job of jobs" (removed)="remove(job)">
+      {{ job }}
+      <button matChipRemove>
+        <mat-icon>cancel</mat-icon>
+      </button>
+    </mat-chip>
+    <input
+      class="newJobInput form-control"
+      placeholder="New job..."
+      #jobInput
+      [formControl]="jobCtrl"
+      [matAutocomplete]="auto"
+      [matChipInputFor]="chipList"
+      [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+    />
+  </mat-chip-list>
+  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+    <mat-option *ngFor="let job of filteredJobs | async" [value]="job">
+      {{ job }}
+    </mat-option>
+  </mat-autocomplete>

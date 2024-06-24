@@ -1,0 +1,22 @@
+.example-card {
+    max-width: 700px;
+  }
+
+  .card{
+    margin-top: 20px;
+  }
+
+  .thumbs-up{
+    cursor: pointer;
+    color: green;
+  }
+
+  .thumbs-down{
+    cursor: pointer;
+    color: red;
+  }
+
+  .content{
+    max-height: calc(1.2em * 7);
+    overflow-y: scroll;
+  }

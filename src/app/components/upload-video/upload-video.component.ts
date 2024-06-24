@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {
   NgxFileDropEntry,
   FileSystemFileEntry,
@@ -20,6 +27,7 @@ export class UploadVideoComponent implements OnInit {
   fileUploaded: boolean = false;
   fileEntry: FileSystemFileEntry | undefined;
   allowedExtensions = ['mp4', 'avi', 'mov', 'mkv'];
+  loading: boolean = false;
 
   createVideoDetailsGroup: any;
 
@@ -78,21 +86,6 @@ export class UploadVideoComponent implements OnInit {
     } else {
       try {
         this.uploadVideo();
-
-        Swal.fire({
-          position: 'center',
-          icon: 'success',
-          title: 'The video has been saved',
-          showConfirmButton: false,
-          timer: 1500,
-        });
-
-
-        setTimeout(() => {
-          this.createVideoDetailsGroup.reset();
-          this.droppedFile = undefined;
-          this.fileUploaded = false;
-        }, 1500);
       } catch (error) {
         Swal.fire({
           icon: 'error',
@@ -126,6 +119,7 @@ export class UploadVideoComponent implements OnInit {
   }
 
   async uploadVideo() {
+    this.loading = true;
     if (this.fileEntry !== undefined) {
       try {
         this.fileEntry.file((file) => {
@@ -133,15 +127,37 @@ export class UploadVideoComponent implements OnInit {
             console.log('Video has been uploaded : ' + data);
 
             let video = new Video();
-            video.title = this.title?.value;
-            video.description = this.description?.value;
+            video.title =
+              this.createVideoDetailsGroup.get('video.title')?.value;
+            video.description =
+              this.createVideoDetailsGroup.get('video.description')?.value;
             video.videoUrl = data;
 
-            this.course?.chapterList
-              .find((chapter) => chapter.title === this.selectedChapter)
-              ?.videoList.push(video);
+            if (video.title == null || video.description == null) {
+              Swal.fire({
+                icon: 'error',
+                title: 'An error occurred during video upload',
+              });
+            } else {
+              this.course?.chapterList
+                .find((chapter) => chapter.title === this.selectedChapter)
+                ?.videoList.push(video);
 
-            this.courseEmitter.emit(this.course);
+              localStorage.setItem('course', JSON.stringify(this.course));
+
+              this.courseEmitter.emit(this.course);
+              this.createVideoDetailsGroup.reset();
+              this.droppedFile = undefined;
+              this.fileUploaded = false;
+              this.loading = false;
+              Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'The video has been saved',
+                showConfirmButton: false,
+                timer: 1500,
+              });
+            }
           });
         });
       } catch (error) {

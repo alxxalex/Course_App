@@ -1,12 +1,9 @@
 <div>
-  <div
-    class="w3-sidebar w3-bar-block w3-light-grey"
-    style="width: 15%; position: relative"
-  >
+  <div class="w3-sidebar w3-bar-block sidebar">
     <div class="w3-bar-item">
       <img id="thumbnail" alt="Course thumbanil" />
       {{ course.title }}
-      <i class="editButton fa fa-edit" routerLink="/course-form"></i>
+      <!--      <i class="editButton fa fa-edit" routerLink="/course-form"></i>-->
     </div>
 
     <!-- Chapters -->
@@ -15,8 +12,9 @@
         class="w3-bar-item w3-button"
         (click)="openChapter(chapter)"
         routerLink="/course-videos"
+        style="margin-top: 3px;"
       >
-        {{ chapter.title }}
+        <span style="font-family: sans-serif; font-size: medium; margin-right: 5px;" >{{ chapter.title }}</span>  
         <span
           class="fa"
           [class.fa-angle-down]="selectedChapter !== chapter"
@@ -30,7 +28,23 @@
 
       <div *ngIf="selectedChapter == chapter.title">
         <ul>
-          <li *ngFor="let video of chapter.videoList" class="w3-bar-item">
+          <li
+            *ngFor="let video of chapter.videoList"
+            class="w3-bar-item w3-button"
+            (click)="selectVideo(video)"
+            [ngStyle]="{
+              'border-left':
+                selectedVideo?.title === video.title
+                  ? '1px solid white'
+                  : 'transparent',
+              'border-radius':
+                selectedVideo?.title === video.title ? '5px 5px 5px 5px' : '0'
+            }"
+          >
+            <span
+              class="green-circle"
+              *ngIf="selectedVideo?.title === video.title"
+            ></span>
             {{ video.title }}
             <i
               class="fa fa-trash-o trash-icon"

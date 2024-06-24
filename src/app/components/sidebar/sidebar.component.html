@@ -1,3 +1,7 @@
+<div *ngIf="loading" class="loader-container">
+  <div class="loader"></div>
+</div>
+
 <div id="menu" *ngIf="isAuthenticated">
   <div
     class="w3-sidebar w3-bar-block w3-card w3-animate-left"
@@ -10,19 +14,23 @@
         &times;
       </button>
     </div>
+    <div class="bar-items">
+      <a class="w3-bar-item w3-button" (click)="toCourses()">What's new</a>
+      <a class="w3-bar-item w3-button" (click)="toRecommendedCourses()">Recommended courses</a>
+      <a
+        *ngIf="isManager"
+        class="w3-bar-item w3-button"
+        (click)="createCourse()"
+        >Create a course</a
+      >
+      <a *ngIf="isManager" class="w3-bar-item w3-button" (click)="toProfile()">Your courses</a>
+      <a *ngIf="!isManager" class="w3-bar-item w3-button" (click)="toProfile()">Enrolled courses</a>
 
-    <a class="w3-bar-item w3-button" (click)="toCourses()">What's new</a>
-    <a class="w3-bar-item w3-button" (click)="createCourse()"
-      >Create a course</a
-    >
-    <a class="w3-bar-item w3-button" (click)="toProfile()">Your courses</a>
+    </div>
     <div class="w3-bar-item profile-bar">
-      <!-- For changing profile picture  -->
-      <!-- matTooltip="Change picture"
-      matTooltipPosition="above" -->
       <img
-
-        src="../../../assets/images/profile-picture.png"
+        (click)="toProfile()"
+        [src]="profilePicture"
         class="profile"
       />
       <span>{{ userFullName }}</span>
@@ -33,9 +41,14 @@
 
   <div id="main" class="bar">
     <div>
+
       <button id="openNav" class="w3-button w3-xlarge" (click)="w3_open()">
         &#9776;
       </button>
+
+
+      <img src="../../../assets/images/logo_name.png" class="menu-logo" (click)="toCourses()">
     </div>
+    
   </div>
 </div>

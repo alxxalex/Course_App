@@ -1,0 +1,13 @@
+<span class="search-container">
+  <input
+    #myInput
+    type="text"
+    placeholder="Search for courses..."
+    class="search-input"
+    (keyup.enter)="doSearch(myInput.value)"
+  />
+
+  <button (click)="doSearch(myInput.value)" class="btn btn-dark">
+    Search
+  </button>
+</span>

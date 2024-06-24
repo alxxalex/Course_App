@@ -1,3 +1,8 @@
+<div *ngIf="loading" class="loader-container">
+  <div class="loader"></div>
+</div>
+
+
 <div class="center">
   <h1>Add a video for {{ selectedChapter }}</h1>
   <form [formGroup]="createVideoDetailsGroup" (ngSubmit)="onSubmit()">
@@ -70,7 +75,9 @@
         ngx-file-drop-content-tmp
         let-openFileSelector="openFileSelector"
       >
+        <p style="color: black;">
         Drag and Drop videos in this section or
+        </p>
         <button class="button" type="button" (click)="openFileSelector()">
           Browse
           <span class="span"> 🔎</span>

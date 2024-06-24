@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { Chapter } from 'src/app/common/chapter';
 import { Course } from 'src/app/common/course';
+import { Video } from 'src/app/common/video';
 
 @Component({
   selector: 'app-course-videos',
@@ -11,6 +12,9 @@ import { Course } from 'src/app/common/course';
 export class CourseVideosComponent implements OnInit {
   selectedChapter: string | undefined;
   course!: Course;
+  selectedVideo!: Video ;
+  isVideoSelected: boolean = false;
+  isVideoPresent: boolean = false;
 
   constructor() {}
 
@@ -18,11 +22,23 @@ export class CourseVideosComponent implements OnInit {
 
   onChapterSelected(chapter: string) {
     this.selectedChapter = chapter;
+    this.isVideoPresent = false;
+    this.selectedVideo = new Video();
   }
 
   courseEmitter(course: Course) {
-    console.log(this.course);
+    this.course = { ...course };
+  }
 
-    this.course = {...course};
+  videoEmitter(video: Video){
+    
+    if(video.title === ''){
+      this.selectedVideo = new Video();
+      this.isVideoPresent = false;      
+    }else{
+    this.selectedVideo = {...video}
+    this.isVideoPresent = true;
+    }
+    
   }
 }

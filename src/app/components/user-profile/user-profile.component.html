@@ -1,0 +1,360 @@
+<div class="row align-items-center top-card">
+  <div class="col-xl-12 col-lg-12 col-md-12 col-12">
+    <!-- Bg -->
+    <div class="pt-20 top-label">
+      <img
+        src="../../../assets/images/logo_name.png"
+        alt=""
+        class="bottom-margin"
+      />
+    </div>
+    <div class="card rounded-bottom smooth-shadow-sm">
+      <div
+        class="d-flex align-items-center justify-content-between pt-4 pb-6 px-4"
+      >
+        <div class="d-flex align-items-center">
+          <div
+            id="avatar"
+            class="avatar-xxl avatar-indicators avatar-online me-2 position-relative d-flex justify-content-end align-items-end mt-n10"
+          >
+            <img
+              [src]="profilePictureUrl"
+              class="avatar-xxl rounded-circle border border-2"
+              alt="Image"
+              (click)="selectProfilePicture()"
+            />
+            <input
+              #fileInput
+              type="file"
+              (change)="onFileSelected($event)"
+              style="display: none"
+            />
+          </div>
+
+          <div class="lh-1">
+            <h2 class="mb-0">
+              {{ userFullName }}
+              <a href="#!" class="text-decoration-none"> </a>
+            </h2>
+            <p class="mb-0 d-block">{{ email }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="py-6">
+    <div class="row">
+      <h2
+        *ngIf="!isManager && enrolledCourses.length == 0"
+        style="margin-left: 35%"
+      >
+        No enrollments for this employee
+      </h2>
+      <br />
+      <app-no-data-page
+        *ngIf="!isManager && enrolledCourses.length == 0"
+        style="position: absolute; top: 80%; left: -3%"
+      ></app-no-data-page>
+      <h2
+        *ngIf="
+          isManager && enrolledCourses.length == 0 && yourCourses.length == 0
+        "
+        style="margin-left: 35%"
+      >
+        No enrollments for this employee
+      </h2>
+      <app-no-data-page
+        *ngIf="
+          isManager && enrolledCourses.length == 0 && yourCourses.length == 0
+        "
+        style="position: absolute; top: 80%; left: -3%"
+      ></app-no-data-page>
+      <h1 *ngIf="enrolledCourses.length > 0">Enrolled Courses</h1>
+      <div *ngFor="let course of enrolledCourses" class="col-lg-4 col-12">
+        <!-- card -->
+        <div
+          class="card mb-5 rounded-3 card-course"
+          [ngClass]="{ 'inactive-course': course.archived }"
+        >
+          <div>
+            <img
+              src="{{ course.thumbnailUrl }}"
+              alt="Image"
+              class="img-fluid rounded-top thumbnail"
+            />
+          </div>
+          <!-- avatar -->
+          <div class="avatar avatar-xl mt-n7 ms-4">
+            <img
+              [src]="course.pictureUrl"
+              alt="Image"
+              class="rounded-circle border-4 border-white-color-40"
+            />
+          </div>
+          <!-- card body -->
+          <div class="card-body">
+            <!-- Title -->
+            <div class="align-items">
+              <div>
+                <h4 class="mb-1">{{ course.title }}</h4>
+                <p>{{ course.author }}</p>
+              </div>
+              <div>
+                {{ course.likes }}
+                <i
+                  class="fa fa-thumbs-up thumbs-up"
+                  (click)="thumbsUp(course)"
+                ></i>
+                {{ course.dislikes }}
+                <i
+                  class="fa fa-thumbs-down thumbs-down"
+                  (click)="thumbsDown(course)"
+                ></i>
+                <br />
+                <span>
+                  <i
+                    *ngFor="let r of getStarRange(course.ratingMean)"
+                    class="fa fa-star selected"
+                  ></i>
+                  <i
+                    *ngFor="let r of getStarRange(5 - course.ratingMean)"
+                    class="fa fa-star"
+                  ></i>
+                </span>
+                <span *ngIf="course.ratingList"
+                  >({{ course.ratingList.length }})</span
+                >
+                <span *ngIf="!course.ratingList">(0)</span>
+              </div>
+            </div>
+            <div class="align-items">
+              <span class="d-flex justify-content-between align-items-center">
+                <a class="btn btn-dark" (click)="courseDetails(course)"
+                  >Details</a
+                >
+              </span>
+              <span class="d-flex justify-content-between align-items-center">
+                <div class="dropdown dropstart">
+                  <a
+                    class="btn-icon btn-sm"
+                    id="dropdownMenuSix"
+                    data-bs-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="feather feather-more-vertical icon-xs"
+                    >
+                      <circle cx="12" cy="12" r="1"></circle>
+                      <circle cx="12" cy="5" r="1"></circle>
+                      <circle cx="12" cy="19" r="1"></circle>
+                    </svg>
+                  </a>
+                  <div
+                    class="dropdown-menu"
+                    aria-labelledby="dropdownMenuSix"
+                    *ngIf="!course.archived"
+                  >
+                    <app-comment-popup
+                      [course]="course"
+                      [userFullName]="userFullName"
+                      class="pointer"
+                    ></app-comment-popup>
+                    <app-star-rating
+                      (eventEmitted)="refreshData()"
+                      [course]="course"
+                      [email]="email"
+                      class="pointer"
+                    ></app-star-rating>
+                  </div>
+                </div>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr *ngIf="isManager" style="width: 100%; border: 1px solid black" />
+
+      <div *ngIf="isManager"></div>
+      <h1 *ngIf="yourCourses.length > 0">Your Courses</h1>
+      <div *ngFor="let course of yourCourses" class="col-lg-4 col-12">
+        <!-- card -->
+        <div
+          class="card mb-5 rounded-3 card-course"
+          [ngClass]="{ 'inactive-course': course.archived }"
+        >
+          <div>
+            <img
+              src="{{ course.thumbnailUrl }}"
+              alt="Image"
+              class="img-fluid rounded-top thumbnail"
+            />
+          </div>
+          <!-- avatar -->
+          <div class="avatar avatar-xl mt-n7 ms-4">
+            <img
+              [src]="course.pictureUrl"
+              alt="Image"
+              class="rounded-circle border-4 border-white-color-40"
+            />
+          </div>
+          <!-- card body -->
+          <div class="card-body">
+            <!-- Title -->
+            <div class="align-items">
+              <div>
+                <h4 class="mb-1">{{ course.title }}</h4>
+                <p>{{ course.author }}</p>
+              </div>
+              <div>
+                {{ course.likes }}
+                <i
+                  class="fa fa-thumbs-up thumbs-up"
+                  (click)="thumbsUp(course)"
+                ></i>
+                {{ course.dislikes }}
+                <i
+                  class="fa fa-thumbs-down thumbs-down"
+                  (click)="thumbsDown(course)"
+                ></i>
+                <br />
+                <span>
+                  <i
+                    *ngFor="let r of getStarRange(course.ratingMean)"
+                    class="fa fa-star selected"
+                  ></i>
+                  <i
+                    *ngFor="let r of getStarRange(5 - course.ratingMean)"
+                    class="fa fa-star"
+                  ></i>
+                </span>
+                <span *ngIf="course.ratingList"
+                  >({{ course.ratingList.length }})</span
+                >
+                <span *ngIf="!course.ratingList">(0)</span>
+              </div>
+            </div>
+            <div class="align-items">
+              <span class="d-flex justify-content-between align-items-center">
+                <a class="btn btn-dark" (click)="courseDetails(course)"
+                  >Details</a
+                >
+              </span>
+              <span class="d-flex justify-content-between align-items-center">
+                <div class="dropdown dropstart">
+                  <a
+                    class="btn-icon btn-sm"
+                    id="dropdownMenuSix"
+                    data-bs-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="feather feather-more-vertical icon-xs"
+                    >
+                      <circle cx="12" cy="12" r="1"></circle>
+                      <circle cx="12" cy="5" r="1"></circle>
+                      <circle cx="12" cy="19" r="1"></circle>
+                    </svg>
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuSix">
+                    <a
+                      class="dropdown-item d-flex align-items-center pointer"
+                      (click)="deleteCourse(course)"
+                      *ngIf="!course.archived"
+                    >
+                      <i class="fa fa-archive delete-icon"></i>
+                      Archive
+                    </a>
+                    <a
+                      class="dropdown-item d-flex align-items-center pointer"
+                      (click)="activateCourse(course)"
+                      *ngIf="course.archived"
+                    >
+                      <i class="fa fa-bullhorn delete-icon"></i>
+                      Activate
+                    </a>
+                    <app-comment-popup
+                      [course]="course"
+                      [userFullName]="userFullName"
+                      class="pointer"
+                      *ngIf="!course.archived"
+                    ></app-comment-popup>
+                    <app-star-rating
+                      (eventEmitted)="refreshData()"
+                      [course]="course"
+                      [email]="email"
+                      class="pointer"
+                      *ngIf="!course.archived"
+                    ></app-star-rating>
+                    <a
+                      class="dropdown-item d-flex align-items-center pointer"
+                      (click)="addFile(auxiliaryFileInput, course)"
+                      *ngIf="!course.archived"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="feather feather-file-text me-2 icon-xxs dropdown-item-icon"
+                      >
+                        <path
+                          d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                        ></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                      </svg>
+                      Add file
+                      <input
+                        #auxiliaryFileInput
+                        type="file"
+                        (change)="onAuxiliaryFileSelected($event, course)"
+                        style="display: none"
+                      />
+                    </a>
+                  </div>
+                </div>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="showCommentPopup">
+  <app-comment-popup
+    [course]="selectedCourse"
+    [userFullName]="userFullName"
+  ></app-comment-popup>
+</div>

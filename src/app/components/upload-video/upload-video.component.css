@@ -1,10 +1,14 @@
+h1{
+  padding-top: 30px;
+}
+
 #title {
-  border-color: #0782d0;
+  border-color: rgb(203,161,53);
   margin-bottom: 20px;
 }
 
 #description {
-  border-color: #0782d0;
+  border-color: rgb(203,161,53);
   margin-bottom: 20px;
 }
 
@@ -47,4 +51,48 @@
 .button:hover {
   box-shadow: none;
   border: 2px solid gray;
+}
+
+::ng-deep .ngx-file-drop__drop-zone {
+  border: 2px dotted rgb(203, 161, 53) !important; 
+  border-radius: 5px; 
+  padding: 20px; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-control:focus {
+  box-shadow: 0 0 0 3px rgba(203, 161, 53, 0.3);
+}
+
+.loader {
+  width: 60px;
+  padding: 8px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: black;
+  --_m: conic-gradient(#0000 10%, #000), linear-gradient(#000 0 0) content-box;
+  -webkit-mask: var(--_m);
+  mask: var(--_m);
+  -webkit-mask-composite: source-out;
+  mask-composite: subtract;
+  animation: l3 1s infinite linear;
+}
+@keyframes l3 {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+.loader-container {
+  background-color: rgba(0, 0, 0, 0.4);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  left: 0px;
+  z-index: 10;
 }

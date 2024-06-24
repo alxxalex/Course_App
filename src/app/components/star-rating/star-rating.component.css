@@ -1,0 +1,23 @@
+.star {
+  font-size: 21px;
+  margin-left: 2px;
+  margin-right: 7px;
+}
+
+.fa-star.selected {
+  color: yellow; /* Selected star color */
+}
+
+.fa-star {
+  font-size: 25px;
+}
+
+.star-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.star-padding{
+  padding: 15px;
+}

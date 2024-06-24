@@ -1,0 +1,22 @@
+<div id="dialog" class="center">
+  <h2>Leave a comment on {{data.title}}</h2>
+  <mat-dialog-content>
+    <textarea
+      name="comment"
+      id=""
+      cols="40"
+      rows="7"
+      [(ngModel)]="data.comment"
+    ></textarea>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-button (click)="close()">No Thanks</button>
+    <button
+      mat-button
+      [mat-dialog-close]="data.comment"
+      cdkFocusInitial
+    >
+      Submit
+    </button>
+  </mat-dialog-actions>
+</div>
