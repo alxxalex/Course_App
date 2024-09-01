@@ -1,7 +1,7 @@
 <div class="w3-sidebar w3-bar-block sidebar" *ngIf="isVideoPresent">
   <h2>{{course.title}}</h2>
   <div *ngFor="let chapter of course.chapterList">
-    <button class="w3-bar-item w3-button" (click)="openChapter(chapter)">
+    <button class="w3-bar-item w3-button" (click)="openChapter(chapter)" style="font-size: 16px;">
       {{ chapter.title }}
       <span
         class="fa"

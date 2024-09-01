@@ -90,7 +90,8 @@ export class CoursesComponent implements OnInit {
       let newCourse = new Course();
       newCourse = data.content[i];
       newCourse.courseId = data.content[i].id;
-      this.courses.unshift(newCourse);
+      // this.courses.unshift(newCourse);
+      this.courses.push(newCourse);
     }
     this.filteredCourses = this.courses;
 

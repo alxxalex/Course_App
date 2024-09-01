@@ -36,6 +36,7 @@ export class UserProfileComponent implements OnInit {
   isManager: boolean = false;
 
   showCommentPopup: boolean = false;
+  loading:boolean = false;
 
   constructor(
     private oktaAuthService: OktaAuthStateService,
@@ -212,6 +213,7 @@ export class UserProfileComponent implements OnInit {
     const file: File = event.target.files[0];
     console.log(file.name);
 
+    this.loading =true;
     this.courseService
       .addAuxiliaryFile(course.courseId, file)
       .subscribe((data) => {
@@ -223,7 +225,10 @@ export class UserProfileComponent implements OnInit {
           showConfirmButton: false,
           timer: 1500,
         });
+        this.refreshData();
+        this.loading = false;
       });
+
   }
 
   activateCourse(course: Course) {

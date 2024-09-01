@@ -32,23 +32,37 @@ export class CourseContentComponent implements OnInit {
       this.courseService.getCourseById(id).subscribe((data) => {
         this.course = data;
         this.course.courseId = id;
-        this.selectedVideo = this.course.chapterList[0].videoList[0];
+        this.selectedVideo = null;
+        // console.log(this.selectedVideo);
+        
+        
         for (let i = 0; i < this.course.chapterList.length; i++) {
           const chapter = this.course.chapterList[i];
+          console.log(i);
+          
           for (let j = 0; j < chapter.videoList.length; j++) {
             const video = chapter.videoList[j];
+            console.log(video);
+            
             if (!video.usersThatWatched.includes(this.email)) {
+              console.log('aici');
+              
               this.selectedVideo = video;
               break;
             }
           }
           if (
-            this.selectedVideo.title !==
-            this.course.chapterList[0].videoList[0].title
+            this.selectedVideo !==
+            null
           ) {
+            console.log('break');
+            
             break;
           }
         }
+        if(this.selectedVideo == null){
+          this.selectedVideo = this.course.chapterList[0].videoList[0];
+        }        
         this.isVideoPresent = true;
       });
     });
